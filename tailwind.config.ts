@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1779578470115812149.html"
 	],
 	prefix: "",
 	theme: {
@@ -88,7 +89,12 @@ export default {
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease forwards',
+			},
+			fontFamily: {
+				display: ['Unbounded', 'sans-serif'],
+				body: ['Golos Text', 'sans-serif'],
 			}
 		}
 	},

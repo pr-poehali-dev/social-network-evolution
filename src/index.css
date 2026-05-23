@@ -97,5 +97,54 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Golos Text", sans-serif;
   }
+}
+
+:root {
+  --bg-base: #f7f7f6;
+  --bg-card: #ffffff;
+  --bg-hover: #f0f0ef;
+  --text-primary: #1a1a18;
+  --text-secondary: #4a4a46;
+  --text-muted: #9a9a94;
+  --border-light: #e8e8e4;
+  --accent-red: #e84444;
+}
+
+.font-display {
+  font-family: "Unbounded", sans-serif;
+}
+
+.font-body {
+  font-family: "Golos Text", sans-serif;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.3s ease forwards;
 }
