@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { POSTS } from "@/data/mockData";
+import { STORIES, Story, StoryItem } from "@/data/storiesData";
 import Icon from "@/components/ui/icon";
+import StoriesBar from "@/components/stories/StoriesBar";
+import StoryViewer from "@/components/stories/StoryViewer";
+import StoryCreator from "@/components/stories/StoryCreator";
 
 const interests = ["Все", "Фото", "Дизайн", "Архитектура", "Путешествия", "Еда", "Арт"];
 
@@ -21,6 +25,12 @@ const FeedPage = () => {
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<Record<string, { user: string; text: string; time: string }[]>>({});
 
+  // Stories state
+  const [stories, setStories] = useState<Story[]>(STORIES);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+  const [creatorOpen, setCreatorOpen] = useState(false);
+
   const toggleLike = (id: string) =>
     setPosts(prev => prev.map(p =>
       p.id === id ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 } : p
@@ -38,12 +48,28 @@ const FeedPage = () => {
     setCommentText("");
   };
 
+  const openStory = (index: number) => {
+    setViewerIndex(index);
+    setViewerOpen(true);
+  };
+
+  const handleStorySeen = (storyId: string) => {
+    setStories(prev => prev.map(s => s.id === storyId ? { ...s, seen: true } : s));
+  };
+
+  const handlePublishStory = (item: StoryItem) => {
+    setStories(prev => prev.map(s =>
+      s.userId === "me" ? { ...s, items: [...s.items, item], seen: false } : s
+    ));
+  };
+
   const leftCol = posts.filter((_, i) => i % 2 === 0);
   const rightCol = posts.filter((_, i) => i % 2 === 1);
 
   return (
     <div className="mesh-bg min-h-screen">
       <div className="max-w-3xl mx-auto px-4 py-6">
+
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div>
@@ -59,6 +85,13 @@ const FeedPage = () => {
             </button>
           </div>
         </div>
+
+        {/* Stories */}
+        <StoriesBar
+          stories={stories}
+          onStoryClick={openStory}
+          onAddStory={() => setCreatorOpen(true)}
+        />
 
         {/* Filters */}
         <div className="flex gap-2 mb-5 overflow-x-auto pb-1 scrollbar-hide">
@@ -98,7 +131,7 @@ const FeedPage = () => {
       {openPost && (
         <div
           className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4"
-          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
+          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={() => setOpenPost(null)}
         >
           <div
@@ -115,7 +148,6 @@ const FeedPage = () => {
               >
                 <Icon name="X" size={14} />
               </button>
-              {/* Like / save */}
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-[9px] font-bold">
@@ -124,15 +156,19 @@ const FeedPage = () => {
                   <span className="text-white text-xs font-body font-medium">{openPost.user.name}</span>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => { toggleLike(openPost.id); setOpenPost(p => p ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 } : p); }}
+                  <button
+                    onClick={() => { toggleLike(openPost.id); setOpenPost(p => p ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 } : p); }}
                     className={`flex items-center gap-1 px-2.5 py-1 rounded-full backdrop-blur-sm text-xs font-body transition-all
-                      ${openPost.liked ? "bg-[var(--accent-red)] text-white" : "bg-white/20 text-white"}`}>
+                      ${openPost.liked ? "bg-[var(--accent-red)] text-white" : "bg-white/20 text-white"}`}
+                  >
                     <Icon name="Heart" size={12} className={openPost.liked ? "fill-current" : ""} />
                     {openPost.likes}
                   </button>
-                  <button onClick={() => { toggleSave(openPost.id); setOpenPost(p => p ? { ...p, saved: !p.saved } : p); }}
+                  <button
+                    onClick={() => { toggleSave(openPost.id); setOpenPost(p => p ? { ...p, saved: !p.saved } : p); }}
                     className={`flex items-center gap-1 px-2.5 py-1 rounded-full backdrop-blur-sm text-xs font-body transition-all
-                      ${openPost.saved ? "bg-white text-[var(--text-primary)]" : "bg-white/20 text-white"}`}>
+                      ${openPost.saved ? "bg-white text-[var(--text-primary)]" : "bg-white/20 text-white"}`}
+                  >
                     <Icon name="Bookmark" size={12} />
                   </button>
                 </div>
@@ -142,7 +178,7 @@ const FeedPage = () => {
             {/* Caption */}
             <div className="px-4 py-3 border-b border-[var(--border-light)]">
               <p className="text-sm font-body text-[var(--text-secondary)] leading-relaxed">{openPost.caption}</p>
-              <div className="flex gap-1.5 mt-2">
+              <div className="flex gap-1.5 mt-2 flex-wrap">
                 {openPost.tags.map(tag => (
                   <span key={tag} className="text-[10px] font-body text-[var(--accent-blue)] bg-[var(--accent-blue)]/10 px-2 py-0.5 rounded-full">
                     #{tag}
@@ -194,15 +230,35 @@ const FeedPage = () => {
           </div>
         </div>
       )}
+
+      {/* Story Viewer */}
+      {viewerOpen && (
+        <StoryViewer
+          stories={stories}
+          initialStoryIndex={viewerIndex}
+          onClose={() => setViewerOpen(false)}
+          onStorySeen={handleStorySeen}
+        />
+      )}
+
+      {/* Story Creator */}
+      {creatorOpen && (
+        <StoryCreator
+          onClose={() => setCreatorOpen(false)}
+          onPublish={handlePublishStory}
+        />
+      )}
     </div>
   );
 };
 
-const PostCard = ({ post, delay, onLike, onSave, onClick }: {
+interface PostProps {
   post: Post; delay: number;
   onLike: (id: string) => void; onSave: (id: string) => void;
   onClick: () => void;
-}) => (
+}
+
+const PostCard = ({ post, delay, onLike, onSave, onClick }: PostProps) => (
   <div
     onClick={onClick}
     className="group glass-card rounded-3xl overflow-hidden cursor-pointer animate-fade-in"
