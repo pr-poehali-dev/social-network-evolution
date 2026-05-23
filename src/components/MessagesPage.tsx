@@ -40,8 +40,8 @@ const MessagesPage = () => {
   const formatDuration = (s: number) => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
   return (
-    <div className="h-screen flex" style={{ height: "calc(100vh - 80px)" }}>
-      <div className={`${selectedChat ? "hidden md:flex" : "flex"} flex-col w-full md:w-80 border-r border-[var(--border-light)] bg-white`}>
+    <div className="mesh-bg min-h-screen h-screen flex transition-all duration-300" style={{ height: "calc(100vh - 80px)" }}>
+      <div className={`${selectedChat ? "hidden md:flex" : "flex"} flex-col w-full md:w-80 border-r border-[var(--border-light)] bg-[var(--bg-card-solid)] transition-all duration-300`}>
         <div className="px-4 py-5 border-b border-[var(--border-light)]">
           <h1 className="font-display text-xl font-bold text-[var(--text-primary)]">Сообщения</h1>
         </div>
@@ -83,7 +83,7 @@ const MessagesPage = () => {
       </div>
 
       {selectedChat && activeChat ? (
-        <div className="flex-1 flex flex-col relative">
+        <div className="flex-1 flex flex-col relative transition-all duration-300">
           {callState !== "none" && (
             <div className="absolute inset-0 bg-[var(--text-primary)] z-10 flex flex-col items-center justify-center text-white animate-fade-in">
               <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center text-3xl font-bold font-display mb-4">
@@ -108,7 +108,7 @@ const MessagesPage = () => {
             </div>
           )}
 
-          <div className="px-4 py-3 border-b border-[var(--border-light)] bg-white flex items-center justify-between">
+          <div className="px-4 py-3 border-b border-[var(--border-light)] bg-[var(--bg-card-solid)] flex items-center justify-between transition-all duration-300">
             <div className="flex items-center gap-3">
               <button onClick={() => setSelectedChat(null)} className="md:hidden text-[var(--text-secondary)] mr-1">
                 <Icon name="ArrowLeft" size={18} />
@@ -152,7 +152,7 @@ const MessagesPage = () => {
             ))}
           </div>
 
-          <div className="px-4 py-3 border-t border-[var(--border-light)] bg-white">
+          <div className="px-4 py-3 border-t border-[var(--border-light)] bg-[var(--bg-card-solid)] transition-all duration-300">
             <div className="flex items-center gap-2">
               <button className="w-9 h-9 rounded-xl bg-[var(--bg-hover)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                 <Icon name="Paperclip" size={16} />

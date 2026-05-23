@@ -7,30 +7,36 @@ interface MobileNavProps {
 }
 
 const navItems = [
-  { id: "feed" as Page, icon: "Layout" },
-  { id: "search" as Page, icon: "Search" },
-  { id: "music" as Page, icon: "Music" },
+  { id: "feed"        as Page, icon: "Layout" },
+  { id: "search"      as Page, icon: "Search" },
   { id: "communities" as Page, icon: "Globe" },
-  { id: "messages" as Page, icon: "MessageCircle" },
-  { id: "profile" as Page, icon: "User" },
+  { id: "music"       as Page, icon: "Music" },
+  { id: "messages"    as Page, icon: "MessageCircle", badge: true },
+  { id: "profile"     as Page, icon: "User" },
 ];
 
 const MobileNav = ({ activePage, setActivePage }: MobileNavProps) => {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-card)] border-t border-[var(--border-light)] z-40 px-2 py-2 transition-colors duration-300">
-      <div className="flex justify-around">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-bottom px-3 py-2 transition-all duration-300">
+      <div className="flex justify-around max-w-sm mx-auto">
         {navItems.map((item) => {
           const isActive = activePage === item.id;
           return (
             <button
               key={item.id}
               onClick={() => setActivePage(item.id)}
-              className={`flex flex-col items-center p-2 rounded-xl transition-all duration-200 relative
-                ${isActive ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+              className="relative flex flex-col items-center p-2 rounded-2xl transition-all duration-200"
             >
-              <Icon name={item.icon} size={20} />
-              {isActive && (
-                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[var(--text-primary)]"></span>
+              <div className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-200
+                ${isActive
+                  ? "bg-[var(--text-primary)] text-white shadow-md scale-105"
+                  : "text-[var(--text-muted)]"
+                }`}
+              >
+                <Icon name={item.icon} size={18} />
+              </div>
+              {item.badge && !isActive && (
+                <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[var(--accent-red)]" />
               )}
             </button>
           );
