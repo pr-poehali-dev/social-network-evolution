@@ -9,15 +9,15 @@ interface MobileNavProps {
 const navItems = [
   { id: "feed" as Page, icon: "Layout" },
   { id: "search" as Page, icon: "Search" },
-  { id: "friends" as Page, icon: "Users" },
+  { id: "music" as Page, icon: "Music" },
+  { id: "communities" as Page, icon: "Globe" },
   { id: "messages" as Page, icon: "MessageCircle" },
-  { id: "notifications" as Page, icon: "Bell" },
   { id: "profile" as Page, icon: "User" },
 ];
 
 const MobileNav = ({ activePage, setActivePage }: MobileNavProps) => {
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[var(--border-light)] z-40 px-2 py-2">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-card)] border-t border-[var(--border-light)] z-40 px-2 py-2 transition-colors duration-300">
       <div className="flex justify-around">
         {navItems.map((item) => {
           const isActive = activePage === item.id;

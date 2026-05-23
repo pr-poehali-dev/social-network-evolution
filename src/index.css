@@ -112,6 +112,19 @@
   --accent-red: #e84444;
 }
 
+.dark {
+  --bg-base: #111110;
+  --bg-card: #1c1c1a;
+  --bg-hover: #252523;
+  --text-primary: #f0f0ee;
+  --text-secondary: #b0b0aa;
+  --text-muted: #666662;
+  --border-light: #2e2e2c;
+  --accent-red: #ff5555;
+  --background: #111110;
+  --foreground: #f0f0ee;
+}
+
 .font-display {
   font-family: "Unbounded", sans-serif;
 }
